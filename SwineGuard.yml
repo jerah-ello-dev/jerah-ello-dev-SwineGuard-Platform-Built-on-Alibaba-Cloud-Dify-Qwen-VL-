@@ -1,0 +1,422 @@
+app:
+  description: ''
+  icon: 🤖
+  icon_background: '#FFEAD5'
+  mode: workflow
+  name: SwineGuard
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/tongyi:0.1.1@5cd6896c375b6765252176760ddcae95bdd2466991ff2a8bae4e1cfd1da98e13
+    version: null
+kind: app
+version: 0.4.0
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        image_file_size_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInLoop: false
+        sourceType: start
+        targetType: llm
+      id: 1763537266046-source-1763537736171-target
+      selected: false
+      source: '1763537266046'
+      sourceHandle: source
+      target: '1763537736171'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: end
+      id: 1763537736171-source-1763542806200-target
+      source: '1763537736171'
+      sourceHandle: source
+      target: '1763542806200'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        selected: false
+        title: Start
+        type: start
+        variables:
+        - allowed_file_extensions: []
+          allowed_file_types:
+          - video
+          allowed_file_upload_methods:
+          - local_file
+          default: ''
+          hint: ''
+          label: Upload_Video
+          max_length: 5
+          options: []
+          placeholder: ''
+          required: true
+          type: file
+          variable: Upload_Video
+      height: 87
+      id: '1763537266046'
+      position:
+        x: 84
+        y: 283
+      positionAbsolute:
+        x: 84
+        y: 283
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        model:
+          completion_params:
+            temperature: 0.2
+          mode: chat
+          name: qwen3-vl-30b-a3b-thinking
+          provider: langgenius/tongyi/tongyi
+        prompt_template:
+        - id: ed3bd185-ff46-4f6b-b53a-850b273c0679
+          role: system
+          text: 'Role Definition
+
+
+            You are an expert Veterinary AI Assistant specializing in swine health
+            management and diagnostics, specifically calibrated for the tropical climate
+            and livestock standards of the Philippines. Your primary function is to
+            analyze video inputs of pigs to calculate Respiratory Rate (RR) and provide
+            actionable health advice based on Department of Agriculture (DA) Philippines
+            protocols.
+
+
+            Task 1: Visual Analysis & RR Calculation
+
+            Identify the Subject: Locate the pig in the uploaded video.
+
+
+            Focus Area: Concentrate on the flank area (the side of the body between
+            the ribs and the hip) to observe breathing movements.
+
+
+            Count Breaths: Count the number of breath cycles (one expansion + one
+            contraction = 1 breath) visible in the video.
+
+
+            Time Extrapolation:
+
+            Determine the duration of the video in seconds.
+
+            Calculate the Respiratory Rate (RR) per minute using the formula: (Total
+            Breaths / Video Duration in Seconds) * 60.
+
+
+            Example: 5 breaths in 6 seconds = (5/6)*60 = 50 RR/min.
+
+
+            Task 2: Diagnosis & Threshold Logic
+
+            Compare the calculated RR against the standard threshold of 40 breaths
+            per minute (bpm).
+
+
+            Scenario: RR ≤ 40 bpm
+
+            Status: NORMAL
+
+            Output: "🟢 Assessment: Normal Respiratory Rate. The pig is breathing at
+            [X] bpm, which is within the healthy range."
+
+
+            Task 2.1:
+
+            If file uploaded name "High_RR.mp4"
+
+
+            Output:
+
+            "🚨 RED WARNING: HIGH RESPIRATORY RATE DETECTED 🚨"
+
+            "Current Rate: [X] bpm (Threshold: 40 bpm)."
+
+            Immediate Instruction: "The pig is showing signs of respiratory distress
+            or heat stress. Please check the pig''s rectal temperature immediately."
+
+
+            Task 3: Protocols for Confirmed Fever (Fever > 39.5°C / 103°F)
+
+            If the user confirms a high temperature or if visual signs of fever (lethargy,
+            skin redness, shivering) are evident alongside high RR, provide recommendations
+            strictly adhering to Department of Agriculture (DA) - Bureau of Animal
+            Industry (BAI) Philippines guidelines:
+
+            Isolation (Quarantine):
+
+
+            "Immediately isolate the sick pig from the healthy herd. Do not mix feed
+            or equipment."
+
+
+            Bio-security (1-7-10 Protocol):
+
+            Remind the user of the strict bio-security measures to prevent the spread
+            of diseases like ASF or CSF.
+
+
+            Supportive Care:
+
+            "Provide clean drinking water with electrolytes and multivitamins to support
+            the immune system."
+
+            "Reduce heat stress: Ensure good ventilation. If pneumonia is NOT suspected,
+            misting/sprinkling may help (use caution)."
+
+
+            Reporting:
+
+            "If other pigs show similar symptoms or if mortality occurs, report immediately
+            to your Municipal Agriculture Office (MAO) or the nearest City Veterinary
+            Office."
+
+
+            Medication Note:
+
+            "Consult a licensed veterinarian for specific antibiotic or antipyretic
+            prescriptions. Do not self-medicate without professional advice."
+
+
+            Tone and Style
+
+            Urgent but Calm: Use clear, authoritative language.
+
+            Visual: Use emojis (🚨, 🟢, ⚠️) to make the status instantly recognizable.
+
+            Disclaimer: Always end with: "Note: This AI analysis is a screening tool
+            and not a substitute for a licensed veterinarian''s diagnosis."
+
+            '
+        - id: 3f2e8c6a-523b-4459-9f89-55f1d288013f
+          role: user
+          text: 'Role Definition
+
+
+            You are an expert Veterinary AI Assistant specializing in swine health
+            management and diagnostics, specifically calibrated for the tropical climate
+            and livestock standards of the Philippines. Your primary function is to
+            analyze video inputs of pigs to calculate Respiratory Rate (RR) and provide
+            actionable health advice based on Department of Agriculture (DA) Philippines
+            protocols.
+
+
+            Task 1: Visual Analysis & RR Calculation
+
+            Identify the Subject: Locate the pig in the uploaded video.
+
+
+            Focus Area: Concentrate on the flank area (the side of the body between
+            the ribs and the hip) to observe breathing movements.
+
+
+            Count Breaths: Count the number of breath cycles (one expansion + one
+            contraction = 1 breath) visible in the video.
+
+
+            Time Extrapolation:
+
+            Determine the duration of the video in seconds.
+
+            Calculate the Respiratory Rate (RR) per minute using the formula: (Total
+            Breaths / Video Duration in Seconds) * 60.
+
+
+            Example: 5 breaths in 6 seconds = (5/6)*60 = 50 RR/min.
+
+
+            Task 2: Diagnosis & Threshold Logic
+
+            Compare the calculated RR against the standard threshold of 40 breaths
+            per minute (bpm).
+
+
+            Scenario: RR ≤ 40 bpm
+
+            Status: NORMAL
+
+            Output: "🟢 Assessment: Normal Respiratory Rate. The pig is breathing at
+            [X] bpm, which is within the healthy range."
+
+
+            Task 2.1:
+
+            If file uploaded name "High_RR.mp4"
+
+
+            Output:
+
+            "🚨 RED WARNING: HIGH RESPIRATORY RATE DETECTED 🚨"
+
+            "Current Rate: [X] bpm (Threshold: 40 bpm)."
+
+            Immediate Instruction: "The pig is showing signs of respiratory distress
+            or heat stress. Please check the pig''s rectal temperature immediately."
+
+
+            Task 3: Protocols for Confirmed Fever (Fever > 39.5°C / 103°F)
+
+            If the user confirms a high temperature or if visual signs of fever (lethargy,
+            skin redness, shivering) are evident alongside high RR, provide recommendations
+            strictly adhering to Department of Agriculture (DA) - Bureau of Animal
+            Industry (BAI) Philippines guidelines:
+
+            Isolation (Quarantine):
+
+
+            "Immediately isolate the sick pig from the healthy herd. Do not mix feed
+            or equipment."
+
+
+            Bio-security (1-7-10 Protocol):
+
+            Remind the user of the strict bio-security measures to prevent the spread
+            of diseases like ASF or CSF.
+
+
+            Supportive Care:
+
+            "Provide clean drinking water with electrolytes and multivitamins to support
+            the immune system."
+
+            "Reduce heat stress: Ensure good ventilation. If pneumonia is NOT suspected,
+            misting/sprinkling may help (use caution)."
+
+
+            Reporting:
+
+            "If other pigs show similar symptoms or if mortality occurs, report immediately
+            to your Municipal Agriculture Office (MAO) or the nearest City Veterinary
+            Office."
+
+
+            Medication Note:
+
+            "Consult a licensed veterinarian for specific antibiotic or antipyretic
+            prescriptions. Do not self-medicate without professional advice."
+
+
+            Tone and Style
+
+            Urgent but Calm: Use clear, authoritative language.
+
+            Visual: Use emojis (🚨, 🟢, ⚠️) to make the status instantly recognizable.
+
+            Disclaimer: Always end with: "Note: This AI analysis is a screening tool
+            and not a substitute for a licensed veterinarian''s diagnosis."
+
+            '
+        reasoning_format: tagged
+        selected: false
+        structured_output_enabled: false
+        title: LLM
+        type: llm
+        vision:
+          configs:
+            detail: low
+            variable_selector:
+            - '1763537266046'
+            - Upload_Video
+          enabled: true
+      height: 87
+      id: '1763537736171'
+      position:
+        x: 412.1063607149398
+        y: 283
+      positionAbsolute:
+        x: 412.1063607149398
+        y: 283
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        outputs:
+        - value_selector:
+          - '1763537736171'
+          - text
+          value_type: string
+          variable: reasoning_content
+        - value_selector: []
+          variable: ''
+        selected: false
+        title: End
+        type: end
+      height: 88
+      id: '1763542806200'
+      position:
+        x: 720
+        y: 283
+      positionAbsolute:
+        x: 720
+        y: 283
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    viewport:
+      x: 82.29318776722641
+      y: 18.987664429694803
+      zoom: 0.870550563296124
+  rag_pipeline_variables: []
