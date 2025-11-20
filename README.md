@@ -1,0 +1,2 @@
+# jerah-ello-dev-SwineGuard-Platform-Built-on-Alibaba-Cloud-Dify-Qwen-VL-
+Built on Alibaba Cloud using Dify and Qwen-VL, SwineGuard is a Behavioral Triage System that combats the fatal 'wait and see' mindset by augmenting farmers with a unique dual-verification workflow combining AI detection of fever proxies with mandatory human confirmation to rapidly identify and stop the spread of viral swine diseases like ASF.
